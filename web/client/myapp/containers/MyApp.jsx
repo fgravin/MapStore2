@@ -8,16 +8,14 @@
 const React = require('react');
 const {Provider} = require('react-redux');
 const PropTypes = require('prop-types');
-const proj4 = require('proj4');
 
 const {changeBrowserProperties} = require('../../actions/browser');
-const {loadLocale} = require('../../actions/locale');
 const {localConfigLoaded} = require('../../actions/localConfig');
-const {loadPrintCapabilities} = require('../../actions/print');
+var loadMapConfig = require('../../actions/config').loadMapConfig;
 
 const ConfigUtils = require('../../utils/ConfigUtils');
-const LocaleUtils = require('../../utils/LocaleUtils');
 const PluginsUtils = require('../../utils/PluginsUtils');
+const MapViewer = require('../../containers/MapViewer');
 
 const assign = require('object-assign');
 const url = require('url');
@@ -30,17 +28,13 @@ class MyApp extends React.Component {
     pluginsDef: PropTypes.object,
     storeOpts: PropTypes.object,
     initialActions: PropTypes.array,
-    appComponent: PropTypes.func,
-    printingEnabled: PropTypes.bool,
     onStoreInit: PropTypes.func
   };
 
   static defaultProps = {
     pluginsDef: {plugins: {}, requires: {}},
     initialActions: [],
-    printingEnabled: false,
     appStore: () => ({dispatch: () => {}}),
-    appComponent: () => <span/>,
     onStoreInit: () => {}
   };
 
@@ -48,36 +42,15 @@ class MyApp extends React.Component {
     store: null
   };
 
-  addProjDefinitions(config) {
-    if (config.projectionDefs && config.projectionDefs.length) {
-      config.projectionDefs.forEach((proj) => {
-        proj4.defs(proj.code, proj.def);
-      });
-
-    }
-  }
-
   componentWillMount() {
-    const onInit = (config) => {
-      if (!global.Intl ) {
-        require.ensure(['intl', 'intl/locale-data/jsonp/en.js', 'intl/locale-data/jsonp/it.js'], (require) => {
-          global.Intl = require('intl');
-          require('intl/locale-data/jsonp/en.js');
-          require('intl/locale-data/jsonp/it.js');
-          this.init(config);
-        });
-      } else {
-        this.init(config);
-      }
-    };
-
+    // use config in url query if available
     if (urlQuery.localConfig) {
       ConfigUtils.setLocalConfigurationFile(urlQuery.localConfig + '.json');
     }
+
+    // load configuration (from localConfig.json by default)
     ConfigUtils.loadConfiguration().then((config) => {
       const opts = assign({}, this.props.storeOpts, {
-        onPersist: onInit.bind(null, config)
-      }, {
         initialState: config.initialState || {defaultState: {}, mobile: {}}
       });
       this.store = this.props.appStore(this.props.pluginsDef.plugins, opts);
@@ -86,36 +59,30 @@ class MyApp extends React.Component {
         store: this.store
       });
 
-      if (!opts.persist) {
-        onInit(config);
-      }
+      // get configuration file url (defaults to config.json on the app folder)
+      const { configUrl, legacy } = ConfigUtils.getConfigurationOptions(urlQuery, 'config', 'json');
+
+      // dispatch an action to load the configuration from the config.json file
+      this.store.dispatch(loadMapConfig(configUrl, legacy));
+
+      // dispatch config in store
+      this.store.dispatch(changeBrowserProperties(ConfigUtils.getBrowserProperties()));
+      this.store.dispatch(localConfigLoaded(config));
     });
 
   }
 
   render() {
-    const {plugins, requires} = this.props.pluginsDef;
+    const plugins = PluginsUtils.getPlugins(this.props.pluginsDef.plugins);
     const {pluginsDef, appStore, initialActions, appComponent, ...other} = this.props;
-    const App = this.props.appComponent;
+
+    // render a map viewer with the defined plugins
     return this.state.store ?
       <Provider store={this.state.store}>
-          <App {...other} plugins={assign(PluginsUtils.getPlugins(plugins), {requires})}/>
+        <MapViewer params={{mapType: "openlayers", mapId: "map"}} plugins={plugins}/>
       </Provider>
       : null;
   }
-  init = (config) => {
-    this.store.dispatch(changeBrowserProperties(ConfigUtils.getBrowserProperties()));
-    this.store.dispatch(localConfigLoaded(config));
-    this.addProjDefinitions(config);
-    const locale = LocaleUtils.getUserLocale();
-    this.store.dispatch(loadLocale(null, locale));
-    if (this.props.printingEnabled) {
-      this.store.dispatch(loadPrintCapabilities(ConfigUtils.getConfigProp('printUrl')));
-    }
-    this.props.initialActions.forEach((action) => {
-      this.store.dispatch(action());
-    });
-  };
 }
 
 module.exports = MyApp;

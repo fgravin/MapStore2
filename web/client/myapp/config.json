@@ -23,8 +23,5 @@
         "format": "image/png"
       }
     ]
-  },
-  "plugins": {
-    "desktop"
   }
 }

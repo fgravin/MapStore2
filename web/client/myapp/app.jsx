@@ -8,33 +8,29 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const {connect} = require('react-redux');
-const LocaleUtils = require('../utils/LocaleUtils');
 
 const startApp = () => {
   const ConfigUtils = require('../utils/ConfigUtils');
-  const {loadMaps} = require('../actions/maps');
-  const {loadVersion} = require('../actions/version');
   const MyApp = require('./containers/MyApp');
 
-  const {pages, pluginsDef, initialState, storeOpts, appEpics = {}} = require('./appConfig');
-  
+  // get the app config from the appConfig.js file
+  const {pluginsDef, initialState, storeOpts, appEpics = {}} = require('./appConfig');
+
+  // this is the redux store that will be used
   const appStore = require('../stores/StandardStore').bind(null, initialState, {
     maptype: require('../reducers/maptype'),
     maps: require('../reducers/maps')
   }, appEpics);
 
-  const initialActions = [
-    () => loadMaps(ConfigUtils.getDefaults().geoStoreUrl, ConfigUtils.getDefaults().initialMapFilter || "*"),
-    loadVersion
-  ];
+  // initial action: not much
+  const initialActions = [];
 
   const appConfig = {
     storeOpts,
     appEpics,
     appStore,
     pluginsDef,
-    initialActions,
-    printingEnabled: true
+    initialActions
   };
 
   ReactDOM.render(
@@ -43,9 +39,5 @@ const startApp = () => {
   );
 };
 
-if (!global.Intl ) {
-  // Ensure Intl is loaded, then call the given callback
-  LocaleUtils.ensureIntl(startApp);
-} else {
-  startApp();
-}
+// go!
+startApp();

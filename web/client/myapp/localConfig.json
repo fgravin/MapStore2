@@ -1,0 +1,13 @@
+{
+  "plugins": {
+    "desktop": [
+      {
+        "name": "Map",
+        "cfg": {
+          "zoomControl": false,
+          "tools": ["locate"]
+        }
+      }
+    ]
+  }
+}
