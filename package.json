@@ -192,6 +192,8 @@
     "compile": "npm run clean && mkdirp ./web/client/dist && webpack --progress --config prod-webpack.config.js",
     "analyze": "npm run clean && mkdirp ./web/client/dist && webpack --json | webpack-bundle-size-analyzer",
     "start": "webpack-dev-server --progress --colors --port 8081 --hot --inline --content-base web/client",
+    "poc": "webpack-dev-server --config web/client/myapp/webpack.config.js --hot --progress --colors --port 8081 --content-base web/client/myapp",
+    "layertree": "webpack-dev-server --progress --colors --port 8081 --content-base web/client/examples/layertree",
     "startprod": "webpack-dev-server --progress --colors --port 8081 --hot --inline --content-base web/client  --config prod-webpack.config.js",
     "examples": "webpack-dev-server --progress --colors --port 8081 --hot --inline --content-base web/client --config examples-webpack.config.js",
     "test": "karma start ./karma.conf.single-run.js",

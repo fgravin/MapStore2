@@ -1,0 +1,11 @@
+{
+  "standard": [
+    {
+      "name": "Map",
+      "cfg": {
+        "zoomControl": false,
+        "tools": ["locate"]
+      }
+    }
+  ]
+}
