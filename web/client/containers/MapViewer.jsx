@@ -40,6 +40,7 @@ class MapViewer extends React.Component {
     }
 
     render() {
+        // TODO: can add pluginsConfig object
         return (<PluginsContainer key="viewer" id="viewer" className="viewer"
             plugins={this.props.plugins}
             params={this.props.params}
