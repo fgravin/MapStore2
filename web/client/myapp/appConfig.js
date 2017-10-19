@@ -5,6 +5,7 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
+const moment = require('moment');
 
 module.exports = {
     pluginsDef: require('./plugins.js'),
@@ -41,9 +42,10 @@ module.exports = {
                 }
             },
             globaltime: {
-                min: '01-01-1980',
-                max: '01-01-2010',
-                format: 'DD-MM-YYYY'
+                min: moment('2006-06-22T03:10:00Z'),
+                max: moment('2006-06-24T03:10:00Z'),
+                value: moment('2006-06-23T03:10:00Z'),
+                format: 'LLL'
             }
         },
         mobile: {

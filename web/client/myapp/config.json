@@ -2,7 +2,7 @@
   "map": {
     "projection": "EPSG:900913",
 		"units": "m",
-		"center": {"x": 1250000.000000, "y": 5370000.000000, "crs": "EPSG:900913"},
+		"center": {"x": -9979618.412913, "y": 4065627.835391, "crs": "EPSG:900913"},
     "zoom":5,
     "layers": [
       {
@@ -21,6 +21,19 @@
         "name": "nurc:Arc_Sample",
         "group": "Meteo",
         "format": "image/png"
+      },
+      {
+        "type": "wms",
+        "url":"https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi",
+        "visibility": true,
+        "opacity": 0.5,
+        "title": "Test time layer",
+        "name": "nexrad-n0r-wmst",
+        "group": "Meteo",
+        "format": "image/png",
+        "params": {
+          "TIME": ""
+        }
       }
     ]
   }

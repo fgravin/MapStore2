@@ -13,6 +13,9 @@ var {LAYER_LOADING, LAYER_LOAD, LAYER_ERROR, CHANGE_LAYER_PROPERTIES, CHANGE_GRO
 
 const {TOGGLE_CONTROL} = require('../actions/controls');
 
+const {MODIFY_GLOBAL_TIME} = require('../myapp/actions/globaltime');
+const moment = require('moment');
+
 var assign = require('object-assign');
 var {isObject, isArray, head, isString} = require('lodash');
 
@@ -325,6 +328,21 @@ function layers(state = [], action) {
         case FILTER_LAYERS: {
             return assign({}, state, {
                 filter: action.text || ''
+            });
+        }
+        case MODIFY_GLOBAL_TIME: {
+            var newTime = moment(action.value);
+            newTime.minute(Math.floor(newTime.minute() / 5) * 5).startOf('minute');
+            var layers = (state.flat || []).map((layer) =>
+                assign({}, layer,
+                    layer.params && layer.params.TIME !== undefined ? {
+                        params: {
+                            TIME: newTime.toISOString()
+                        }
+                    } : null)
+            );
+            return assign({}, state, {
+                flat: layers
             });
         }
         default:

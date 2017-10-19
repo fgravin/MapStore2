@@ -26,8 +26,8 @@ module.exports = {
     GlobalTimePlugin: connect(
         (state) => ({
             time: state.globaltime.value,
-            min: moment(state.globaltime.min, state.globaltime.format),
-            max: moment(state.globaltime.max, state.globaltime.format),
+            min: state.globaltime.min,
+            max: state.globaltime.max,
             format: state.globaltime.format
         }),
         {
