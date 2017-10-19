@@ -39,6 +39,11 @@ module.exports = {
                     enabled: false,
                     seeMore: false
                 }
+            },
+            globaltime: {
+                min: '01-01-1980',
+                max: '01-01-2010',
+                format: 'DD-MM-YYYY'
             }
         },
         mobile: {

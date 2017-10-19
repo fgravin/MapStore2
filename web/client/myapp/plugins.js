@@ -67,6 +67,9 @@ module.exports = {
     FeatureEditorPlugin: require('../plugins/FeatureEditor'),
     AutoMapUpdatePlugin: require('../plugins/AutoMapUpdate'),
     MapFooterPlugin: require('../plugins/MapFooter'),
-    AnnotationsPlugin: require('../plugins/Annotations')
+    AnnotationsPlugin: require('../plugins/Annotations'),
+
+    // myapp plugins
+    GlobalTimePlugin: require('./plugins/GlobalTime')
   }
 };

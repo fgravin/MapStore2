@@ -20,6 +20,9 @@ const MapViewer = require('../../containers/MapViewer');
 const assign = require('object-assign');
 const url = require('url');
 
+// const TimePicker = require('../components/TimePicker');
+// const moment = require('moment');
+
 const urlQuery = url.parse(window.location.href, true).query;
 
 class MyApp extends React.Component {
@@ -79,6 +82,9 @@ class MyApp extends React.Component {
     // render a map viewer with the defined plugins
     return this.state.store ?
       <Provider store={this.state.store}>
+        {/* <TimePicker min={moment().subtract(1, 'month')} max={moment().add(1, 'month')}
+          onChange={time => console.log(time)}
+         /> */}
         <MapViewer params={{mapType: "openlayers", mapId: "map"}} plugins={plugins}/>
       </Provider>
       : null;

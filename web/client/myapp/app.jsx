@@ -17,10 +17,7 @@ const startApp = () => {
   const {pluginsDef, initialState, storeOpts, appEpics = {}} = require('./appConfig');
 
   // this is the redux store that will be used
-  const appStore = require('../stores/StandardStore').bind(null, initialState, {
-    maptype: require('../reducers/maptype'),
-    maps: require('../reducers/maps')
-  }, appEpics);
+  const appStore = require('../stores/StandardStore').bind(null, initialState, {}, appEpics);
 
   // initial action: not much
   const initialActions = [];
