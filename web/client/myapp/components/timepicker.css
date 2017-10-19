@@ -1,11 +1,14 @@
 .time-picker {
     height: 50px;
+    padding: 8px 16px 8px 16px;
+    background-color: white;
+}
+
+.time-picker.absolute {
     position: absolute;
     bottom: 46px;
     left: 100px;
     right: 70px;
-    padding: 8px 16px 8px 16px;
-    background-color: white;
 }
 
 .time-picker input {

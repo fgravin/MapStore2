@@ -8,6 +8,8 @@
 
 var {MODIFY_GLOBAL_TIME} = require('../actions/globaltime');
 const moment = require('moment');
+const assign = require('object-assign');
+
 
 /**
  * stores the global time value, used by layers as a parameter
@@ -22,7 +24,7 @@ const moment = require('moment');
  */
 function globaltime(state = {}, action) {
     switch (action.type) {
-        case MODIFY_GLOBAL_TIME:  return Object.assign(state,
+        case MODIFY_GLOBAL_TIME:  return assign(state,
             {value: moment(action.value)});
         default: return state;
     }

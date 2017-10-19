@@ -10,7 +10,17 @@ const {modify} = require('../actions/globaltime');
 
 const {connect} = require('react-redux');
 const moment = require('moment');
+const assign = require('object-assign');
 
+let GlobalTimePlugin = connect((state) => ({
+        time: state.globaltime.value,
+        min: state.globaltime.min,
+        max: state.globaltime.max,
+        format: state.globaltime.format
+    }),
+    {
+        onChange: modify
+    })(require('../components/TimePicker'))
 
 /**
   * Global Time Plugin. Allows modifying the "time" parameter for all layers
@@ -23,17 +33,18 @@ const moment = require('moment');
   *
   */
 module.exports = {
-    GlobalTimePlugin: connect(
-        (state) => ({
-            time: state.globaltime.value,
-            min: state.globaltime.min,
-            max: state.globaltime.max,
-            format: state.globaltime.format
-        }),
-        {
-            onChange: modify
+    GlobalTimePlugin: assign(GlobalTimePlugin, {
+        DrawerMenu: {
+            name: 'globaltime',
+            position: 0,
+            glyph: "time",
+            buttonConfig: {
+                buttonClassName: "square-button no-border",
+                tooltip: "toc.layers"
+            },
+            priority: 1
         }
-    )(require('../components/TimePicker')),
+    }),
     reducers: {
         globaltime: require('../reducers/globaltime')
     }
