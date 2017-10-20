@@ -16,6 +16,8 @@ const Title = require('./fragments/Title');
 const WMSLegend = require('./fragments/WMSLegend');
 const LayersTool = require('./fragments/LayersTool');
 const Slider = require('react-nouislider');
+const TimePicker = require('../../myapp/components/TimePicker');
+const moment = require('moment');
 
 class DefaultLayer extends React.Component {
     static propTypes = {
@@ -77,6 +79,20 @@ class DefaultLayer extends React.Component {
                                         this.props.onUpdateNode(this.props.node.id, 'layers', {opacity: parseFloat(opacity[0].replace(' %', '')) / 100});
                                     }
                                 }}/>
+                        </Col>
+                    </Row> : null}
+                    {this.props.node.params && this.props.node.params.TIME !== undefined ?
+                    <Row>
+                        <Col xs={12} className="">
+                            <TimePicker
+                                min={moment('2006-06-22T03:10:00Z')}
+                                max={moment('2006-06-24T03:10:00Z')}
+                                format="LLL"
+                                time={moment(this.props.node.params.TIME || '')}
+                                onChange={(time) => {
+                                    this.props.onUpdateNode(this.props.node.id, 'layers', {params: {TIME: moment(time).toISOString()}});
+                                }}
+                            />
                         </Col>
                     </Row> : null}
                     {this.props.activateLegendTool ?

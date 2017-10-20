@@ -32,7 +32,7 @@
         "group": "Meteo",
         "format": "image/png",
         "params": {
-          "TIME": ""
+          "TIME": "2006-06-23T03:10:00Z"
         }
       }
     ]
